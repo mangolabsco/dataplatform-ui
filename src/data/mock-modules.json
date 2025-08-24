@@ -1,0 +1,482 @@
+{
+  "sources": [
+    {
+      "id": "postgresql_source",
+      "name": "PostgreSQL Database",
+      "category": "Database",
+      "type": "database",
+      "description": "Connect to PostgreSQL database",
+      "icon": "database",
+      "parameters": [
+        {
+          "name": "hostname",
+          "label": "Hostname",
+          "type": "text",
+          "required": true,
+          "placeholder": "localhost",
+          "help": "Database server hostname or IP address"
+        },
+        {
+          "name": "port",
+          "label": "Port",
+          "type": "number",
+          "required": true,
+          "default": 5432,
+          "placeholder": "5432",
+          "help": "Database server port"
+        },
+        {
+          "name": "database_name",
+          "label": "Database Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "my_database",
+          "help": "Name of the database to connect to"
+        },
+        {
+          "name": "username",
+          "label": "Username",
+          "type": "text",
+          "required": true,
+          "placeholder": "postgres",
+          "help": "Database username"
+        },
+        {
+          "name": "password",
+          "label": "Password",
+          "type": "password",
+          "required": true,
+          "placeholder": "Enter password",
+          "help": "Database password"
+        },
+        {
+          "name": "ssl_enabled",
+          "label": "Enable SSL",
+          "type": "boolean",
+          "required": false,
+          "default": false,
+          "help": "Enable SSL/TLS connection"
+        }
+      ]
+    },
+    {
+      "id": "mysql_source",
+      "name": "MySQL Database",
+      "category": "Database",
+      "type": "database",
+      "description": "Connect to MySQL database",
+      "icon": "database",
+      "parameters": [
+        {
+          "name": "hostname",
+          "label": "Hostname",
+          "type": "text",
+          "required": true,
+          "placeholder": "localhost",
+          "help": "Database server hostname or IP address"
+        },
+        {
+          "name": "port",
+          "label": "Port",
+          "type": "number",
+          "required": true,
+          "default": 3306,
+          "placeholder": "3306",
+          "help": "Database server port"
+        },
+        {
+          "name": "database_name",
+          "label": "Database Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "my_database",
+          "help": "Name of the database to connect to"
+        },
+        {
+          "name": "username",
+          "label": "Username",
+          "type": "text",
+          "required": true,
+          "placeholder": "root",
+          "help": "Database username"
+        },
+        {
+          "name": "password",
+          "label": "Password",
+          "type": "password",
+          "required": true,
+          "placeholder": "Enter password",
+          "help": "Database password"
+        }
+      ]
+    },
+    {
+      "id": "rest_api_source",
+      "name": "REST API",
+      "category": "API",
+      "type": "api",
+      "description": "Connect to REST API endpoints",
+      "icon": "globe",
+      "parameters": [
+        {
+          "name": "base_url",
+          "label": "Base URL",
+          "type": "text",
+          "required": true,
+          "placeholder": "https://api.example.com",
+          "help": "Base URL for the API"
+        },
+        {
+          "name": "api_key",
+          "label": "API Key",
+          "type": "password",
+          "required": false,
+          "placeholder": "Enter API key",
+          "help": "API authentication key"
+        },
+        {
+          "name": "timeout",
+          "label": "Timeout (seconds)",
+          "type": "number",
+          "required": false,
+          "default": 30,
+          "placeholder": "30",
+          "help": "Request timeout in seconds"
+        },
+        {
+          "name": "headers",
+          "label": "Custom Headers",
+          "type": "key_value",
+          "required": false,
+          "help": "Additional HTTP headers to include"
+        }
+      ]
+    },
+    {
+      "id": "csv_file_source",
+      "name": "CSV File",
+      "category": "File",
+      "type": "file",
+      "description": "Read data from CSV files",
+      "icon": "file-text",
+      "parameters": [
+        {
+          "name": "file_path",
+          "label": "File Path",
+          "type": "text",
+          "required": true,
+          "placeholder": "/path/to/file.csv",
+          "help": "Path to the CSV file"
+        },
+        {
+          "name": "delimiter",
+          "label": "Delimiter",
+          "type": "select",
+          "required": false,
+          "default": ",",
+          "options": [",", ";", "|", "\t"],
+          "help": "Column delimiter character"
+        },
+        {
+          "name": "has_header",
+          "label": "Has Header Row",
+          "type": "boolean",
+          "required": false,
+          "default": true,
+          "help": "First row contains column headers"
+        },
+        {
+          "name": "encoding",
+          "label": "File Encoding",
+          "type": "select",
+          "required": false,
+          "default": "utf-8",
+          "options": ["utf-8", "latin-1", "ascii"],
+          "help": "Character encoding of the file"
+        }
+      ]
+    }
+  ],
+  "transformations": [
+    {
+      "id": "filter_transformation",
+      "name": "Filter Rows",
+      "category": "Data Processing",
+      "type": "filter",
+      "description": "Filter data rows based on conditions",
+      "icon": "filter",
+      "parameters": [
+        {
+          "name": "filter_expression",
+          "label": "Filter Expression",
+          "type": "textarea",
+          "required": true,
+          "placeholder": "column_name > 100",
+          "help": "SQL-like expression to filter rows"
+        }
+      ]
+    },
+    {
+      "id": "aggregate_transformation",
+      "name": "Aggregate Data",
+      "category": "Data Processing",
+      "type": "aggregate",
+      "description": "Group and aggregate data",
+      "icon": "bar-chart-3",
+      "parameters": [
+        {
+          "name": "group_by",
+          "label": "Group By Columns",
+          "type": "multi_select",
+          "required": true,
+          "options": [],
+          "help": "Columns to group by"
+        },
+        {
+          "name": "aggregations",
+          "label": "Aggregations",
+          "type": "key_value",
+          "required": true,
+          "help": "Column -> Aggregation function mapping (e.g., sales -> sum)"
+        }
+      ]
+    }
+  ],
+  "sinks": [
+    {
+      "id": "postgresql_sink",
+      "name": "PostgreSQL Database",
+      "category": "Database",
+      "type": "database",
+      "description": "Write data to PostgreSQL database",
+      "icon": "database",
+      "parameters": [
+        {
+          "name": "hostname",
+          "label": "Hostname",
+          "type": "text",
+          "required": true,
+          "placeholder": "localhost",
+          "help": "Database server hostname or IP address"
+        },
+        {
+          "name": "port",
+          "label": "Port",
+          "type": "number",
+          "required": true,
+          "default": 5432,
+          "placeholder": "5432",
+          "help": "Database server port"
+        },
+        {
+          "name": "database_name",
+          "label": "Database Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "my_database",
+          "help": "Name of the database to connect to"
+        },
+        {
+          "name": "table_name",
+          "label": "Table Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "my_table",
+          "help": "Target table name"
+        },
+        {
+          "name": "username",
+          "label": "Username",
+          "type": "text",
+          "required": true,
+          "placeholder": "postgres",
+          "help": "Database username"
+        },
+        {
+          "name": "password",
+          "label": "Password",
+          "type": "password",
+          "required": true,
+          "placeholder": "Enter password",
+          "help": "Database password"
+        },
+        {
+          "name": "write_mode",
+          "label": "Write Mode",
+          "type": "select",
+          "required": true,
+          "default": "append",
+          "options": ["append", "overwrite", "upsert"],
+          "help": "How to handle existing data"
+        }
+      ]
+    },
+    {
+      "id": "csv_file_sink",
+      "name": "CSV File",
+      "category": "File",
+      "type": "file",
+      "description": "Write data to CSV files",
+      "icon": "file-text",
+      "parameters": [
+        {
+          "name": "file_path",
+          "label": "File Path",
+          "type": "text",
+          "required": true,
+          "placeholder": "/path/to/output.csv",
+          "help": "Output file path"
+        },
+        {
+          "name": "delimiter",
+          "label": "Delimiter",
+          "type": "select",
+          "required": false,
+          "default": ",",
+          "options": [",", ";", "|", "\t"],
+          "help": "Column delimiter character"
+        },
+        {
+          "name": "include_header",
+          "label": "Include Header",
+          "type": "boolean",
+          "required": false,
+          "default": true,
+          "help": "Include column headers in output"
+        }
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "id": "temporary_table",
+      "name": "Temporary Table",
+      "category": "Storage",
+      "type": "temporary",
+      "description": "Store intermediate results in a temporary table",
+      "icon": "database",
+      "parameters": [
+        {
+          "name": "table_name",
+          "label": "Table Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "temp_results_01",
+          "help": "Name for the temporary table"
+        },
+        {
+          "name": "retention_hours",
+          "label": "Retention (Hours)",
+          "type": "number",
+          "required": false,
+          "default": 24,
+          "placeholder": "24",
+          "help": "How long to keep the data (hours)"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "required": false,
+          "placeholder": "Describe what this table stores",
+          "help": "Optional description for this storage table"
+        }
+      ]
+    },
+    {
+      "id": "persistent_table",
+      "name": "Persistent Table",
+      "category": "Storage",
+      "type": "persistent",
+      "description": "Store results in a persistent database table",
+      "icon": "database",
+      "parameters": [
+        {
+          "name": "table_name",
+          "label": "Table Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "processed_data",
+          "help": "Name for the persistent table"
+        },
+        {
+          "name": "write_mode",
+          "label": "Write Mode",
+          "type": "select",
+          "required": true,
+          "default": "append",
+          "options": ["append", "overwrite", "upsert"],
+          "help": "How to handle existing data"
+        },
+        {
+          "name": "primary_key",
+          "label": "Primary Key Column(s)",
+          "type": "text",
+          "required": false,
+          "placeholder": "id",
+          "help": "Comma-separated list of primary key columns"
+        },
+        {
+          "name": "indexes",
+          "label": "Additional Indexes",
+          "type": "textarea",
+          "required": false,
+          "placeholder": "user_id, created_at",
+          "help": "Comma-separated list of columns to index"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "required": false,
+          "placeholder": "Describe what this table stores",
+          "help": "Optional description for this storage table"
+        }
+      ]
+    },
+    {
+      "id": "versioned_table",
+      "name": "Versioned Table",
+      "category": "Storage",
+      "type": "versioned",
+      "description": "Store results with automatic versioning and rollback capability",
+      "icon": "database",
+      "parameters": [
+        {
+          "name": "table_name",
+          "label": "Table Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "versioned_results",
+          "help": "Name for the versioned table"
+        },
+        {
+          "name": "version_strategy",
+          "label": "Versioning Strategy",
+          "type": "select",
+          "required": true,
+          "default": "timestamp",
+          "options": ["timestamp", "incremental", "semantic"],
+          "help": "How to version the data"
+        },
+        {
+          "name": "max_versions",
+          "label": "Max Versions to Keep",
+          "type": "number",
+          "required": false,
+          "default": 10,
+          "placeholder": "10",
+          "help": "Maximum number of versions to retain"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "type": "textarea",
+          "required": false,
+          "placeholder": "Describe what this table stores",
+          "help": "Optional description for this storage table"
+        }
+      ]
+    }
+  ]
+}

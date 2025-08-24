@@ -1,0 +1,180 @@
+{
+  "sources": [
+    {
+      "id": "source_1",
+      "module_id": "postgresql_source",
+      "name": "Production Database",
+      "description": "Main production PostgreSQL database",
+      "configuration": {
+        "hostname": "prod-db.example.com",
+        "port": 5432,
+        "database_name": "production",
+        "username": "app_user",
+        "password": "****",
+        "ssl_enabled": true
+      },
+      "created_at": "2025-01-15T10:00:00Z",
+      "updated_at": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "source_2",
+      "module_id": "csv_file_source",
+      "name": "Sales Data CSV",
+      "description": "Monthly sales data export",
+      "configuration": {
+        "file_path": "/data/sales_2025.csv",
+        "delimiter": ",",
+        "has_header": true,
+        "encoding": "utf-8"
+      },
+      "created_at": "2025-01-16T14:30:00Z",
+      "updated_at": "2025-01-16T14:30:00Z"
+    }
+  ],
+  "transformations": [
+    {
+      "id": "transform_1",
+      "module_id": "filter_transformation",
+      "name": "Active Users Filter",
+      "description": "Filter for active users only",
+      "configuration": {
+        "filter_expression": "status = 'active' AND last_login > '2025-01-01'"
+      },
+      "created_at": "2025-01-17T09:15:00Z",
+      "updated_at": "2025-01-17T09:15:00Z"
+    }
+  ],
+  "sinks": [
+    {
+      "id": "sink_1",
+      "module_id": "postgresql_sink",
+      "name": "Analytics Warehouse",
+      "description": "Data warehouse for analytics",
+      "configuration": {
+        "hostname": "analytics-db.example.com",
+        "port": 5432,
+        "database_name": "analytics",
+        "table_name": "processed_data",
+        "username": "analytics_user",
+        "password": "****",
+        "write_mode": "append"
+      },
+      "created_at": "2025-01-18T16:45:00Z",
+      "updated_at": "2025-01-18T16:45:00Z"
+    }
+  ],
+  "tables": [
+    {
+      "id": "table_1",
+      "module_id": "temporary_table",
+      "name": "Intermediate Results",
+      "description": "Temporary storage for transformation results",
+      "configuration": {
+        "table_name": "temp_processed_data",
+        "retention_hours": 48,
+        "description": "Stores filtered and cleaned data before final aggregation"
+      },
+      "created_at": "2025-01-19T10:30:00Z",
+      "updated_at": "2025-01-19T10:30:00Z"
+    },
+    {
+      "id": "table_2",
+      "module_id": "persistent_table",
+      "name": "Aggregated Results",
+      "description": "Persistent storage for aggregated metrics",
+      "configuration": {
+        "table_name": "daily_metrics",
+        "write_mode": "upsert",
+        "primary_key": "date, metric_type",
+        "indexes": "date, user_id",
+        "description": "Daily aggregated metrics by user and metric type"
+      },
+      "created_at": "2025-01-19T11:00:00Z",
+      "updated_at": "2025-01-19T11:00:00Z"
+    },
+    {
+      "id": "table_3",
+      "module_id": "versioned_table",
+      "name": "Model Training Data",
+      "description": "Versioned dataset for ML model training",
+      "configuration": {
+        "table_name": "ml_training_data",
+        "version_strategy": "timestamp",
+        "max_versions": 5,
+        "description": "Feature-engineered data with versioning for model reproducibility"
+      },
+      "created_at": "2025-01-19T12:15:00Z",
+      "updated_at": "2025-01-19T12:15:00Z"
+    },
+    {
+      "id": "table_4",
+      "module_id": "temporary_table",
+      "name": "ETL Stage 1",
+      "description": "First stage of ETL pipeline processing",
+      "configuration": {
+        "table_name": "etl_stage_1_temp",
+        "retention_hours": 12,
+        "description": "Raw data after initial cleaning and validation"
+      },
+      "created_at": "2025-01-20T08:00:00Z",
+      "updated_at": "2025-01-20T08:00:00Z"
+    },
+    {
+      "id": "table_5",
+      "module_id": "persistent_table",
+      "name": "Customer Analytics",
+      "description": "Customer behavior and analytics data",
+      "configuration": {
+        "table_name": "customer_analytics",
+        "write_mode": "append",
+        "primary_key": "customer_id, analysis_date",
+        "indexes": "customer_id, segment, last_activity_date",
+        "description": "Customer segmentation and behavioral analytics"
+      },
+      "created_at": "2025-01-20T14:20:00Z",
+      "updated_at": "2025-01-20T14:20:00Z"
+    },
+    {
+      "id": "table_6",
+      "module_id": "versioned_table",
+      "name": "Product Recommendations",
+      "description": "ML model output for product recommendations",
+      "configuration": {
+        "table_name": "product_recommendations",
+        "version_strategy": "semantic",
+        "max_versions": 15,
+        "description": "Versioned product recommendation results from ML pipeline"
+      },
+      "created_at": "2025-01-20T16:45:00Z",
+      "updated_at": "2025-01-20T16:45:00Z"
+    },
+    {
+      "id": "table_7",
+      "module_id": "temporary_table",
+      "name": "Data Quality Check",
+      "description": "Temporary storage for data quality validation results",
+      "configuration": {
+        "table_name": "dq_validation_temp",
+        "retention_hours": 6,
+        "description": "Stores data quality metrics and validation results"
+      },
+      "created_at": "2025-01-21T09:30:00Z",
+      "updated_at": "2025-01-21T09:30:00Z"
+    },
+    {
+      "id": "table_8",
+      "module_id": "persistent_table",
+      "name": "Financial Reports",
+      "description": "Monthly and quarterly financial reporting data",
+      "configuration": {
+        "table_name": "financial_reports",
+        "write_mode": "upsert",
+        "primary_key": "report_type, period_year, period_month",
+        "indexes": "report_date, department, cost_center",
+        "description": "Consolidated financial reporting data with drill-down capabilities"
+      },
+      "created_at": "2025-01-21T11:15:00Z",
+      "updated_at": "2025-01-21T11:15:00Z"
+    }
+  ]
+}
