@@ -1,0 +1,81 @@
+{
+  "id": "workflow_3",
+  "name": "Customer Analytics Pipeline",
+  "description": "Real-time customer behavior analysis and segmentation",
+  "status": "running",
+  "created_at": "2025-01-22T09:15:00Z",
+  "updated_at": "2025-01-23T16:20:00Z",
+  "last_execution": "2025-01-23T16:20:00Z",
+  "execution_status": "running",
+  "nodes": [
+    {
+      "id": "cust-1",
+      "type": "source",
+      "position": {
+        "x": 100,
+        "y": 150
+      },
+      "data": {
+        "label": "Customer Events API",
+        "type": "source",
+        "config": {
+          "moduleId": "rest_api_source",
+          "type": "api"
+        }
+      }
+    },
+    {
+      "id": "cust-2",
+      "type": "transformation",
+      "position": {
+        "x": 350,
+        "y": 150
+      },
+      "data": {
+        "label": "Event Aggregation",
+        "type": "transformation",
+        "config": {
+          "moduleId": "aggregate_transformation",
+          "type": "aggregate"
+        }
+      }
+    },
+    {
+      "id": "cust-3",
+      "type": "table",
+      "position": {
+        "x": 600,
+        "y": 150
+      },
+      "data": {
+        "label": "Customer Segments",
+        "type": "table",
+        "config": {
+          "moduleId": "persistent_table",
+          "instanceId": "table_5",
+          "type": "persistent",
+          "storageType": "persistent"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "cust-edge-1-2",
+      "source": "cust-1",
+      "target": "cust-2",
+      "type": "default"
+    },
+    {
+      "id": "cust-edge-2-3",
+      "source": "cust-2",
+      "target": "cust-3",
+      "type": "default"
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

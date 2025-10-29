@@ -1,0 +1,35 @@
+{
+  "id": "workflow_5",
+  "name": "Financial Reports Generator",
+  "description": "Monthly financial reporting with automated calculations and validations",
+  "status": "draft",
+  "created_at": "2025-01-23T10:30:00Z",
+  "updated_at": "2025-01-23T10:30:00Z",
+  "last_execution": null,
+  "execution_status": "pending",
+  "nodes": [
+    {
+      "id": "fin-1",
+      "type": "source",
+      "position": {
+        "x": 150,
+        "y": 200
+      },
+      "data": {
+        "label": "Financial Data CSV",
+        "type": "source",
+        "config": {
+          "moduleId": "csv_file_source",
+          "instanceId": "source_2",
+          "type": "file"
+        }
+      }
+    }
+  ],
+  "edges": [],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

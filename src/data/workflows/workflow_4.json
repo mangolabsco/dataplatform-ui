@@ -1,0 +1,59 @@
+{
+  "id": "workflow_4",
+  "name": "Sales Data ETL",
+  "description": "Extract, transform and load daily sales data from multiple sources",
+  "status": "failed",
+  "created_at": "2025-01-19T11:00:00Z",
+  "updated_at": "2025-01-23T08:45:00Z",
+  "last_execution": "2025-01-23T08:45:00Z",
+  "execution_status": "failed",
+  "nodes": [
+    {
+      "id": "sales-1",
+      "type": "source",
+      "position": {
+        "x": 100,
+        "y": 100
+      },
+      "data": {
+        "label": "Sales Database",
+        "type": "source",
+        "config": {
+          "moduleId": "postgresql_source",
+          "instanceId": "source_1",
+          "type": "database"
+        }
+      }
+    },
+    {
+      "id": "sales-2",
+      "type": "sink",
+      "position": {
+        "x": 400,
+        "y": 100
+      },
+      "data": {
+        "label": "Data Warehouse",
+        "type": "sink",
+        "config": {
+          "moduleId": "postgresql_sink",
+          "instanceId": "sink_1",
+          "type": "database"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "sales-edge-1-2",
+      "source": "sales-1",
+      "target": "sales-2",
+      "type": "default"
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

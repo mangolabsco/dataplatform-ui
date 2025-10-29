@@ -1,0 +1,130 @@
+{
+  "id": "wf_1756000736889_247900",
+  "name": "Workflow 8/24/2025",
+  "description": "Saved from workflow editor",
+  "status": "draft",
+  "created_at": "2025-08-24T01:58:56.889Z",
+  "updated_at": "2025-08-24T01:58:56.889Z",
+  "last_execution": null,
+  "execution_status": "pending",
+  "nodes": [
+    {
+      "id": "dndnode_0",
+      "type": "source",
+      "position": {
+        "x": 121,
+        "y": 203.9375
+      },
+      "data": {
+        "label": "Production Database",
+        "type": "source",
+        "config": {
+          "moduleId": "postgresql_source",
+          "instanceId": "source_1",
+          "type": "database",
+          "configuration": {
+            "hostname": "prod-db.example.com",
+            "port": 5432,
+            "database_name": "production",
+            "username": "app_user",
+            "password": "****",
+            "ssl_enabled": true
+          },
+          "hostname": "prod-db.example.com",
+          "port": 5432,
+          "database_name": "production",
+          "username": "app_user",
+          "password": "****",
+          "ssl_enabled": true
+        }
+      },
+      "width": 225,
+      "height": 71,
+      "positionAbsolute": {
+        "x": 121,
+        "y": 203.9375
+      }
+    },
+    {
+      "id": "dndnode_1",
+      "type": "transformation",
+      "position": {
+        "x": 471.46000000000004,
+        "y": 240.11249999999995
+      },
+      "data": {
+        "label": "Active Users Filter",
+        "type": "transformation",
+        "config": {
+          "moduleId": "filter_transformation",
+          "instanceId": "transform_1",
+          "type": "filter",
+          "configuration": {
+            "filter_expression": "status = 'active' AND last_login > '2025-01-01'"
+          },
+          "filter_expression": "status = 'active' AND last_login > '2025-01-01'"
+        }
+      },
+      "width": 206,
+      "height": 71,
+      "positionAbsolute": {
+        "x": 471.46000000000004,
+        "y": 240.11249999999995
+      }
+    },
+    {
+      "id": "dndnode_2",
+      "type": "table",
+      "position": {
+        "x": 814.9,
+        "y": 266.03249999999997
+      },
+      "data": {
+        "label": "measurements_table",
+        "type": "table",
+        "config": {
+          "moduleId": "temporary_table",
+          "instanceId": "1001",
+          "type": "temporary",
+          "configuration": {
+            "table_name": "measurements_table",
+            "description": "",
+            "retention_hours": 24
+          },
+          "tableName": "measurements_table",
+          "storageType": "temporary",
+          "table_name": "measurements_table",
+          "description": "",
+          "retention_hours": 24
+        }
+      },
+      "width": 188,
+      "height": 95,
+      "positionAbsolute": {
+        "x": 814.9,
+        "y": 266.03249999999997
+      }
+    }
+  ],
+  "edges": [
+    {
+      "source": "dndnode_0",
+      "sourceHandle": null,
+      "target": "dndnode_1",
+      "targetHandle": null,
+      "id": "reactflow__edge-dndnode_0-dndnode_1"
+    },
+    {
+      "source": "dndnode_1",
+      "sourceHandle": null,
+      "target": "dndnode_2",
+      "targetHandle": null,
+      "id": "reactflow__edge-dndnode_1-dndnode_2"
+    }
+  ],
+  "viewport": {
+    "x": -828.8055555555557,
+    "y": -42.55208333333326,
+    "zoom": 1.388888888888889
+  }
+}
