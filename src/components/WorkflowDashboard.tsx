@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import WorkflowCard, { WorkflowMetrics } from './WorkflowCard';
 import { mockApi } from '../services/mockApi';
+import { Button } from './ui/button';
 
 interface WorkflowDashboardProps {
   onCreateNew: () => void;
@@ -156,35 +157,35 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-6 py-10">
         {/* Header */}
-        <div className="mb-10">
-          <div className="flex items-center justify-between mb-6">
+        <div className="mb-12">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 tracking-tight">Workflows</h1>
-              <p className="mt-3 text-lg text-gray-600 max-w-2xl">
+              <h1 className="text-4xl font-bold text-foreground tracking-tight">Workflows</h1>
+              <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
                 Design, deploy, and monitor your data processing pipelines
               </p>
             </div>
             
-            <button
+            <Button
               onClick={onCreateNew}
-              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+              className="px-6 py-3 text-sm font-semibold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105"
             >
               <Plus className="w-5 h-5 mr-2" />
               New Workflow
-            </button>
+            </Button>
           </div>
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Total Workflows</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stats.total}</p>
-                  <div className="flex items-center mt-2">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Total Workflows</p>
+                  <p className="text-3xl font-bold text-foreground mt-3">{stats.total}</p>
+                  <div className="flex items-center mt-3">
                     <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
                     <span className="text-sm text-green-600 font-medium">+12% this month</span>
                   </div>
@@ -195,14 +196,14 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Running</p>
-                  <p className="text-3xl font-bold text-blue-600 mt-2">{stats.running}</p>
-                  <div className="flex items-center mt-2">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Running</p>
+                  <p className="text-3xl font-bold text-blue-600 mt-3">{stats.running}</p>
+                  <div className="flex items-center mt-3">
                     <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse mr-2"></div>
-                    <span className="text-sm text-gray-600">Active now</span>
+                    <span className="text-sm text-muted-foreground">Active now</span>
                   </div>
                 </div>
                 <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
@@ -211,12 +212,12 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Completed</p>
-                  <p className="text-3xl font-bold text-green-600 mt-2">{stats.completed}</p>
-                  <div className="flex items-center mt-2">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Completed</p>
+                  <p className="text-3xl font-bold text-green-600 mt-3">{stats.completed}</p>
+                  <div className="flex items-center mt-3">
                     <CheckCircle className="w-4 h-4 text-green-500 mr-1" />
                     <span className="text-sm text-green-600 font-medium">98.5% success rate</span>
                   </div>
@@ -227,12 +228,12 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
               </div>
             </div>
             
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-200">
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Failed</p>
-                  <p className="text-3xl font-bold text-red-600 mt-2">{stats.failed}</p>
-                  <div className="flex items-center mt-2">
+                  <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Failed</p>
+                  <p className="text-3xl font-bold text-red-600 mt-3">{stats.failed}</p>
+                  <div className="flex items-center mt-3">
                     <AlertTriangle className="w-4 h-4 text-amber-500 mr-1" />
                     <span className="text-sm text-amber-600 font-medium">Needs attention</span>
                   </div>
@@ -246,31 +247,31 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+        <div className="bg-card rounded-2xl shadow-sm border border-border p-8 mb-10">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-6 lg:space-y-0">
             <div className="flex-1 max-w-lg">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <input
                   type="text"
                   placeholder="Search workflows by name or description..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                  className="w-full pl-12 pr-4 py-3 border border-input bg-background rounded-xl focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 text-foreground placeholder-muted-foreground"
                 />
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-2 text-sm text-gray-700">
-                  <Filter className="w-4 h-4 text-gray-500" />
+            <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2 text-sm text-foreground">
+                  <Filter className="w-4 h-4 text-muted-foreground" />
                   <span className="font-medium">Filter:</span>
                 </div>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-700 font-medium"
+                  className="border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground font-medium"
                 >
                   <option value="all">All Status</option>
                   <option value="draft">Draft</option>
@@ -280,12 +281,12 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
                 </select>
               </div>
               
-              <div className="flex items-center space-x-2 text-sm text-gray-700">
+              <div className="flex items-center space-x-2 text-sm text-foreground">
                 <span className="font-medium">Sort by:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-700 font-medium"
+                  className="border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent bg-background text-foreground font-medium"
                 >
                   <option value="updated_at">Recently Updated</option>
                   <option value="created_at">Recently Created</option>
@@ -295,7 +296,7 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
               
               <button
                 onClick={loadWorkflows}
-                className="p-3 text-gray-500 hover:text-gray-700 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 hover:shadow-sm"
+                className="p-3 text-muted-foreground hover:text-foreground border border-input rounded-lg hover:bg-accent transition-all duration-200 hover:shadow-sm"
                 title="Refresh workflows"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -306,31 +307,31 @@ const WorkflowDashboard: React.FC<WorkflowDashboardProps> = ({
 
         {/* Workflow Cards */}
         {filteredWorkflows.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 text-center py-16">
-            <div className="w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-              <BarChart3 className="w-16 h-16 text-gray-400" />
+          <div className="bg-card rounded-2xl shadow-sm border border-border text-center py-20">
+            <div className="w-32 h-32 bg-gradient-to-br from-muted to-muted/80 rounded-full flex items-center justify-center mx-auto mb-8">
+              <BarChart3 className="w-16 h-16 text-muted-foreground" />
             </div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+            <h3 className="text-2xl font-semibold text-foreground mb-4">
               {searchTerm || statusFilter !== 'all' ? 'No workflows found' : 'No workflows yet'}
             </h3>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
+            <p className="text-muted-foreground mb-10 max-w-md mx-auto leading-relaxed">
               {searchTerm || statusFilter !== 'all' 
                 ? 'Try adjusting your search or filter criteria to find what you\'re looking for.'
                 : 'Transform your data with powerful, visual workflows. Get started by creating your first pipeline.'
               }
             </p>
             {(!searchTerm && statusFilter === 'all') && (
-              <button
+              <Button
                 onClick={onCreateNew}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105"
+                className="px-6 py-3 text-sm font-semibold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Create Your First Workflow
-              </button>
+              </Button>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
             {filteredWorkflows.map((workflow) => (
               <WorkflowCard
                 key={workflow.id}

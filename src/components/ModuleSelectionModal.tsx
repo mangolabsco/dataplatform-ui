@@ -106,55 +106,55 @@ const ModuleSelectionModal: React.FC<ModuleSelectionModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+      <div className="bg-card rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden border border-border">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-8 border-b border-border">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-foreground">
               Select {nodeType.charAt(0).toUpperCase() + nodeType.slice(1)} Module
             </h2>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-muted-foreground mt-2">
               Choose a configured module instance to add to your workflow
             </p>
           </div>
           <button
             onClick={onCancel}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-muted-foreground hover:text-foreground transition-colors duration-200"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
+        <div className="p-8 overflow-y-auto max-h-[60vh]">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <div className="text-lg text-gray-600">Loading modules...</div>
+            <div className="flex items-center justify-center py-16">
+              <div className="text-lg text-muted-foreground">Loading modules...</div>
             </div>
           ) : moduleInstances[moduleType]?.length === 0 ? (
-            <div className="text-center py-12">
-              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${getTypeColor(nodeType)} mb-4`}>
+            <div className="text-center py-16">
+              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full ${getTypeColor(nodeType)} mb-6`}>
                 {nodeType === 'source' ? <Database className="w-8 h-8" /> :
                  nodeType === 'transformation' ? <Settings className="w-8 h-8" /> :
                  nodeType === 'table' ? <Database className="w-8 h-8" /> :
                  <FileText className="w-8 h-8" />}
               </div>
-              <div className="text-gray-400 text-lg mb-2">
+              <div className="text-muted-foreground text-lg mb-3">
                 No {nodeType} modules configured
               </div>
-              <div className="text-gray-500 text-sm mb-4">
+              <div className="text-muted-foreground text-sm mb-6">
                 You need to create {nodeType} module instances before you can add them to your workflow.
               </div>
               <button
                 onClick={onCancel}
-                className="px-4 py-2 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700"
+                className="px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-md hover:bg-secondary/80 transition-colors duration-200"
               >
                 Go to Module Management
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
-              <div className="text-sm font-medium text-gray-700 mb-3">
+            <div className="space-y-4">
+              <div className="text-sm font-medium text-foreground mb-4">
                 Available {nodeType} instances ({moduleInstances[moduleType]?.length}):
               </div>
               
@@ -163,10 +163,10 @@ const ModuleSelectionModal: React.FC<ModuleSelectionModalProps> = ({
                 return (
                   <label
                     key={instance.id}
-                    className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                    className={`flex items-center p-6 border-2 rounded-lg cursor-pointer transition-all hover:shadow-md ${
                       selectedInstance === instance.id
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-primary bg-accent'
+                        : 'border-border hover:border-input'
                     }`}
                   >
                     <input
@@ -185,8 +185,8 @@ const ModuleSelectionModal: React.FC<ModuleSelectionModalProps> = ({
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-900">{instance.name}</h3>
-                          <p className="text-xs text-gray-600">{definition?.name}</p>
+                          <h3 className="text-sm font-semibold text-foreground">{instance.name}</h3>
+                          <p className="text-xs text-muted-foreground">{definition?.name}</p>
                         </div>
                         <div className="text-right">
                           <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -200,15 +200,15 @@ const ModuleSelectionModal: React.FC<ModuleSelectionModalProps> = ({
                       </div>
                       
                       {instance.description && (
-                        <p className="text-xs text-gray-500 mt-2">{instance.description}</p>
+                        <p className="text-xs text-muted-foreground mt-3">{instance.description}</p>
                       )}
                       
-                      <div className="mt-2 flex items-center justify-between">
-                        <div className="text-xs text-gray-400">
+                      <div className="mt-3 flex items-center justify-between">
+                        <div className="text-xs text-muted-foreground">
                           Created: {new Date(instance.created_at!).toLocaleDateString()}
                         </div>
                         {/* Configuration preview */}
-                        <div className="text-xs text-gray-400">
+                        <div className="text-xs text-muted-foreground">
                           {Object.keys(instance.configuration || {}).length} config params
                         </div>
                       </div>
@@ -216,8 +216,8 @@ const ModuleSelectionModal: React.FC<ModuleSelectionModalProps> = ({
                     
                     {selectedInstance === instance.id && (
                       <div className="ml-4">
-                        <div className="w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
-                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-primary-foreground rounded-full"></div>
                         </div>
                       </div>
                     )}
@@ -230,21 +230,21 @@ const ModuleSelectionModal: React.FC<ModuleSelectionModalProps> = ({
 
         {/* Footer */}
         {!loading && moduleInstances[moduleType]?.length > 0 && (
-          <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
-            <div className="text-sm text-gray-600">
+          <div className="flex items-center justify-between p-8 border-t border-border bg-muted">
+            <div className="text-sm text-muted-foreground">
               {selectedInstance ? 'Module instance selected' : 'Select a module instance to continue'}
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-4">
               <button
                 onClick={onCancel}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+                className="px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent transition-colors duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSelect}
                 disabled={!selectedInstance}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium text-primary-foreground bg-primary border border-transparent rounded-md hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
                 Add to Workflow
               </button>

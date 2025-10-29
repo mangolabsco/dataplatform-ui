@@ -150,15 +150,15 @@ const ModuleManagement: React.FC = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col">
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="h-screen flex flex-col bg-background">
+      <div className="bg-card border-b border-border px-8 py-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-foreground">
             Module Management
           </h1>
           <button
             onClick={handleCreateInstance}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex items-center px-5 py-2.5 bg-primary text-primary-foreground text-sm rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-200"
           >
             <Plus className="w-4 h-4 mr-2" />
             Create {activeTab.slice(0, -1)}
@@ -168,21 +168,21 @@ const ModuleManagement: React.FC = () => {
 
       <div className="flex-1 flex">
         {/* Sidebar with tabs */}
-        <div className="w-64 bg-gray-50 border-r border-gray-200">
-          <div className="p-4">
-            <nav className="space-y-2">
+        <div className="w-64 bg-muted border-r border-border">
+          <div className="p-6">
+            <nav className="space-y-3">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`w-full text-left px-4 py-3 rounded-md text-sm font-medium transition-colors ${
                     activeTab === tab.key
-                      ? "bg-blue-100 text-blue-700 border-r-2 border-blue-600"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
                   }`}
                 >
                   {tab.label}
-                  <span className="ml-2 px-2 py-1 text-xs rounded-full bg-gray-200">
+                  <span className="ml-2 px-2 py-1 text-xs rounded-full bg-background text-foreground">
                     {moduleInstances[tab.key]?.length || 0}
                   </span>
                 </button>
@@ -192,33 +192,33 @@ const ModuleManagement: React.FC = () => {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 p-6 overflow-y-auto">
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+        <div className="flex-1 p-8 overflow-y-auto">
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-foreground mb-3">
               {tabs.find((tab) => tab.key === activeTab)?.label}
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               Manage your configured {activeTab} modules.
             </p>
           </div>
 
           {moduleInstances[activeTab]?.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-gray-400 text-lg mb-2">
+            <div className="text-center py-16">
+              <div className="text-muted-foreground text-lg mb-3">
                 No {activeTab} configured
               </div>
-              <div className="text-gray-500 text-sm mb-4">
+              <div className="text-muted-foreground text-sm mb-6">
                 Create your first {activeTab.slice(0, -1)} to get started.
               </div>
               <button
                 onClick={handleCreateInstance}
-                className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
+                className="px-5 py-2.5 bg-primary text-primary-foreground text-sm rounded-md hover:bg-primary/90 transition-colors duration-200"
               >
                 Create {activeTab.slice(0, -1)}
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {moduleInstances[activeTab]?.map((instance) => {
                 const definition = moduleDefinitions[activeTab].find(
                   (def) => def.id === instance.module_id
@@ -226,12 +226,12 @@ const ModuleManagement: React.FC = () => {
                 return (
                   <div
                     key={instance.id}
-                    className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
+                    className="bg-card rounded-lg shadow-sm border border-border p-6"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center">
                         <div
-                          className={`rounded-lg p-2 ${
+                          className={`rounded-lg p-3 ${
                             activeTab === "sources"
                               ? "bg-green-100 text-green-600"
                               : activeTab === "transformations"
@@ -241,25 +241,25 @@ const ModuleManagement: React.FC = () => {
                         >
                           {getIcon(definition?.icon || "settings")}
                         </div>
-                        <div className="ml-3">
-                          <h3 className="text-sm font-medium text-gray-900">
+                        <div className="ml-4">
+                          <h3 className="text-sm font-medium text-foreground">
                             {instance.name}
                           </h3>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {definition?.name}
                           </p>
                         </div>
                       </div>
-                      <div className="flex space-x-1">
+                      <div className="flex space-x-2">
                         <button
                           onClick={() => handleEditInstance(instance)}
-                          className="p-1 text-gray-400 hover:text-blue-600"
+                          className="p-2 text-muted-foreground hover:text-primary hover:bg-accent rounded-md transition-colors duration-200"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteInstance(instance.id!)}
-                          className="p-1 text-gray-400 hover:text-red-600"
+                          className="p-2 text-muted-foreground hover:text-destructive hover:bg-accent rounded-md transition-colors duration-200"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -267,18 +267,18 @@ const ModuleManagement: React.FC = () => {
                     </div>
 
                     {instance.description && (
-                      <p className="text-xs text-gray-600 mt-2">
+                      <p className="text-xs text-muted-foreground mt-3">
                         {instance.description}
                       </p>
                     )}
 
-                    <div className="mt-3 pt-3 border-t border-gray-100">
-                      <div className="text-xs text-gray-500">
+                    <div className="mt-4 pt-4 border-t border-border">
+                      <div className="text-xs text-muted-foreground">
                         Created:{" "}
                         {new Date(instance.created_at!).toLocaleDateString()}
                       </div>
                       {instance.updated_at !== instance.created_at && (
-                        <div className="text-xs text-gray-500">
+                        <div className="text-xs text-muted-foreground">
                           Updated:{" "}
                           {new Date(instance.updated_at!).toLocaleDateString()}
                         </div>

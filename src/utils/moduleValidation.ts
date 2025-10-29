@@ -1,20 +1,58 @@
 import { ModuleParameter } from '../types/modules';
 
+/**
+ * Result object returned by validation functions.
+ * Contains validation status, error messages, and optional warnings.
+ * 
+ * @interface ValidationResult
+ */
 export interface ValidationResult {
+  /** Whether the validation passed without errors */
   isValid: boolean;
+  /** Map of parameter names to error messages */
   errors: Record<string, string>;
+  /** Optional map of parameter names to warning messages */
   warnings?: Record<string, string>;
 }
 
+/**
+ * Result object returned by connection testing functions.
+ * Contains connection test status and details about the result.
+ * 
+ * @interface TestConnectionResult
+ */
 export interface TestConnectionResult {
+  /** Whether the connection test was successful */
   success: boolean;
+  /** Human-readable message describing the result */
   message: string;
+  /** Optional additional details about the test (e.g., data preview) */
   details?: any;
+  /** HTTP status code returned by the connection test */
   statusCode?: number;
 }
 
 /**
- * Validates module configuration based on parameter definitions
+ * Validates module configuration values against their parameter definitions.
+ * Performs comprehensive validation including required fields, data types,
+ * value constraints, and custom validation rules.
+ * 
+ * @param {ModuleParameter[]} parameters - Array of parameter definitions to validate against
+ * @param {Record<string, any>} configuration - Configuration object with parameter values
+ * @returns {ValidationResult} Validation result containing errors and warnings
+ * 
+ * @example
+ * ```typescript
+ * const result = validateModuleConfiguration(
+ *   [{ name: 'port', type: 'number', required: true, validation: { min: 1, max: 65535 } }],
+ *   { port: 3306 }
+ * );
+ * if (result.isValid) {
+ *   // Configuration is valid
+ * } else {
+ *   console.error('Validation errors:', result.errors);
+ * }
+ * ```
  */
 export function validateModuleConfiguration(
   parameters: ModuleParameter[],
@@ -139,7 +177,28 @@ export function validateModuleConfiguration(
 }
 
 /**
- * Tests database connection configuration
+ * Tests database connection using the provided configuration.
+ * Sends a request to the backend API to validate database connectivity,
+ * credentials, and basic query functionality.
+ * 
+ * @param {Record<string, any>} configuration - Database connection configuration
+ * @returns {Promise<TestConnectionResult>} Promise resolving to connection test result
+ * 
+ * @example
+ * ```typescript
+ * const result = await testDatabaseConnection({
+ *   host: 'localhost',
+ *   port: 5432,
+ *   database: 'mydb',
+ *   username: 'user',
+ *   password: 'pass'
+ * });
+ * if (result.success) {
+ *   console.log('Database connection successful');
+ * } else {
+ *   console.error('Connection failed:', result.message);
+ * }
+ * ```
  */
 export async function testDatabaseConnection(
   configuration: Record<string, any>
@@ -172,7 +231,23 @@ export async function testDatabaseConnection(
 }
 
 /**
- * Tests API endpoint configuration
+ * Tests API endpoint accessibility and response using the provided configuration.
+ * Validates endpoint URL, authentication, headers, and basic connectivity.
+ * 
+ * @param {Record<string, any>} configuration - API endpoint configuration
+ * @returns {Promise<TestConnectionResult>} Promise resolving to API test result
+ * 
+ * @example
+ * ```typescript
+ * const result = await testAPIConnection({
+ *   endpoint: 'https://api.example.com/data',
+ *   method: 'GET',
+ *   headers: { 'Authorization': 'Bearer token123' }
+ * });
+ * if (result.success) {
+ *   console.log('API endpoint accessible:', result.details);
+ * }
+ * ```
  */
 export async function testAPIConnection(
   configuration: Record<string, any>
@@ -205,7 +280,24 @@ export async function testAPIConnection(
 }
 
 /**
- * Tests file source configuration
+ * Tests file source accessibility and format validation.
+ * Verifies file path, permissions, format compatibility, and basic structure.
+ * 
+ * @param {Record<string, any>} configuration - File source configuration
+ * @returns {Promise<TestConnectionResult>} Promise resolving to file test result
+ * 
+ * @example
+ * ```typescript
+ * const result = await testFileSource({
+ *   filePath: '/path/to/data.csv',
+ *   format: 'csv',
+ *   encoding: 'utf-8',
+ *   delimiter: ','
+ * });
+ * if (result.success) {
+ *   console.log('File accessible:', result.details);
+ * }
+ * ```
  */
 export async function testFileSource(
   configuration: Record<string, any>
@@ -238,7 +330,22 @@ export async function testFileSource(
 }
 
 /**
- * Generic configuration test based on module type
+ * Generic configuration test that routes to appropriate test function based on module type.
+ * Analyzes the module ID to determine the test type and calls the corresponding function.
+ * 
+ * @param {string} moduleId - Module identifier used to determine test type
+ * @param {Record<string, any>} configuration - Module configuration to test
+ * @returns {Promise<TestConnectionResult>} Promise resolving to test result
+ * 
+ * @example
+ * ```typescript
+ * const result = await testModuleConfiguration('mysql_source', {
+ *   host: 'localhost',
+ *   port: 3306,
+ *   database: 'test'
+ * });
+ * // Automatically routes to testDatabaseConnection based on 'mysql' in moduleId
+ * ```
  */
 export async function testModuleConfiguration(
   moduleId: string,

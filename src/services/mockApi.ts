@@ -1,52 +1,109 @@
-import { ModuleDefinition, ModuleInstance, ModulesConfig, ModuleType } from '../types/modules';
-import mockModulesData from '../data/mock-modules.json';
-import mockInstancesData from '../data/mock-module-instances.json';
-import mockWorkflowsData from '../data/mock-workflows.json';
+import {
+  ModuleDefinition,
+  ModuleInstance,
+  ModulesConfig,
+  ModuleType,
+} from "../types/modules";
+import mockModulesData from "../data/mock-modules.json";
 
-// Local storage keys
+/**
+ * Local storage keys used for persisting mock data across sessions.
+ * These keys ensure consistent data storage and retrieval.
+ */
 const STORAGE_KEYS = {
-  MODULE_INSTANCES: 'mock_module_instances',
-  WORKFLOWS: 'mock_workflows',
-  LAST_ID: 'mock_last_id'
+  /** Key for storing module instances in localStorage */
+  MODULE_INSTANCES: "mock_module_instances",
+  /** Key for storing workflow data in localStorage */
+  WORKFLOWS: "mock_workflows",
+  /** Key for storing the last generated ID counter */
+  LAST_ID: "mock_last_id",
 };
 
+/**
+ * Mock API service that simulates backend functionality for development and testing.
+ * This service provides a complete implementation of the data platform API using
+ * localStorage for persistence and JSON files for initial data.
+ *
+ * Features:
+ * - Module definition and instance management
+ * - Workflow creation, editing, and execution
+ * - Connection testing simulation
+ * - Persistent data storage using localStorage
+ * - Automatic ID generation and data validation
+ *
+ * @class MockApiService
+ */
 class MockApiService {
+  /** Cached module definitions loaded from mock data files */
   private moduleDefinitions: ModulesConfig;
+  /** Counter for generating unique IDs */
   private lastId: number;
 
+  /**
+   * Initializes the mock API service with data from JSON files and localStorage.
+   * Sets up the service state and ensures localStorage contains necessary data.
+   */
   constructor() {
     this.moduleDefinitions = mockModulesData as ModulesConfig;
     this.lastId = this.getLastId();
-    
+
     // Initialize localStorage with mock data if it doesn't exist
     this.initializeStorage();
   }
 
+  /**
+   * Retrieves the last used ID from localStorage or returns default starting value.
+   * @private
+   * @returns {number} The last generated ID or 1000 if none exists
+   */
   private getLastId(): number {
     const stored = localStorage.getItem(STORAGE_KEYS.LAST_ID);
     return stored ? parseInt(stored, 10) : 1000;
   }
 
+  /**
+   * Updates the last used ID in both memory and localStorage.
+   * @private
+   * @param {number} id - The new last ID value
+   */
   private setLastId(id: number): void {
     this.lastId = id;
     localStorage.setItem(STORAGE_KEYS.LAST_ID, id.toString());
   }
 
+  /**
+   * Generates a unique ID by incrementing the last used ID.
+   * @private
+   * @returns {string} A unique string identifier
+   */
   private generateId(): string {
     const newId = this.lastId + 1;
     this.setLastId(newId);
     return newId.toString();
   }
 
+  /**
+   * Initializes localStorage with default mock data if no existing data is found.
+   * This ensures the application has data to work with on first run.
+   * @private
+   */
   private initializeStorage(): void {
-    const existingInstances = localStorage.getItem(STORAGE_KEYS.MODULE_INSTANCES);
+    const existingInstances = localStorage.getItem(
+      STORAGE_KEYS.MODULE_INSTANCES
+    );
     if (!existingInstances) {
-      localStorage.setItem(STORAGE_KEYS.MODULE_INSTANCES, JSON.stringify(mockInstancesData));
+      localStorage.setItem(
+        STORAGE_KEYS.MODULE_INSTANCES,
+        JSON.stringify(mockModulesData)
+      );
     }
-    
+
     const existingWorkflows = localStorage.getItem(STORAGE_KEYS.WORKFLOWS);
     if (!existingWorkflows) {
-      localStorage.setItem(STORAGE_KEYS.WORKFLOWS, JSON.stringify(mockWorkflowsData));
+      localStorage.setItem(
+        STORAGE_KEYS.WORKFLOWS,
+        JSON.stringify(mockModulesData)
+      );
     }
   }
 
@@ -58,8 +115,13 @@ class MockApiService {
     return { sources: [], transformations: [], sinks: [], tables: [] };
   }
 
-  private setStoredInstances(instances: Record<ModuleType, ModuleInstance[]>): void {
-    localStorage.setItem(STORAGE_KEYS.MODULE_INSTANCES, JSON.stringify(instances));
+  private setStoredInstances(
+    instances: Record<ModuleType, ModuleInstance[]>
+  ): void {
+    localStorage.setItem(
+      STORAGE_KEYS.MODULE_INSTANCES,
+      JSON.stringify(instances)
+    );
   }
 
   private getStoredWorkflows(): any {
@@ -74,25 +136,45 @@ class MockApiService {
     localStorage.setItem(STORAGE_KEYS.WORKFLOWS, JSON.stringify(data));
   }
 
-  // Simulate API delay
+  /**
+   * Simulates network delay for realistic API behavior during development.
+   * @private
+   * @param {number} ms - Delay duration in milliseconds (default: 100ms)
+   * @returns {Promise<void>} Promise that resolves after the specified delay
+   */
   private async delay(ms: number = 100): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  // Get all module definitions
+  /**
+   * Retrieves all available module definitions organized by type.
+   * @public
+   * @returns {Promise<ModulesConfig>} Promise resolving to the complete modules configuration
+   */
   async getModules(): Promise<ModulesConfig> {
     await this.delay();
     return this.moduleDefinitions;
   }
 
-  // Get all module instances
+  /**
+   * Retrieves all module instances organized by module type.
+   * @public
+   * @returns {Promise<Record<ModuleType, ModuleInstance[]>>} Promise resolving to instances grouped by type
+   */
   async getModuleInstances(): Promise<Record<ModuleType, ModuleInstance[]>> {
     await this.delay();
     return this.getStoredInstances();
   }
 
-  // Get module instances for a specific type
-  async getModuleInstancesByType(moduleType: ModuleType): Promise<ModuleInstance[]> {
+  /**
+   * Retrieves module instances filtered by a specific module type.
+   * @public
+   * @param {ModuleType} moduleType - The type of modules to retrieve
+   * @returns {Promise<ModuleInstance[]>} Promise resolving to filtered module instances
+   */
+  async getModuleInstancesByType(
+    moduleType: ModuleType
+  ): Promise<ModuleInstance[]> {
     await this.delay();
     const instances = this.getStoredInstances();
     return instances[moduleType] || [];
@@ -100,7 +182,7 @@ class MockApiService {
 
   // Create a new module instance
   async createModuleInstance(
-    moduleType: ModuleType, 
+    moduleType: ModuleType,
     data: {
       module_id: string;
       name: string;
@@ -111,14 +193,18 @@ class MockApiService {
     await this.delay();
 
     // Validate that the module_id exists in definitions
-    const moduleExists = this.moduleDefinitions[moduleType].some(def => def.id === data.module_id);
+    const moduleExists = this.moduleDefinitions[moduleType].some(
+      (def) => def.id === data.module_id
+    );
     if (!moduleExists) {
-      throw new Error(`Module with ID ${data.module_id} not found in ${moduleType}`);
+      throw new Error(
+        `Module with ID ${data.module_id} not found in ${moduleType}`
+      );
     }
 
     const instances = this.getStoredInstances();
     const now = new Date().toISOString();
-    
+
     const newInstance: ModuleInstance = {
       id: this.generateId(),
       module_id: data.module_id,
@@ -126,12 +212,12 @@ class MockApiService {
       description: data.description,
       configuration: data.configuration,
       created_at: now,
-      updated_at: now
+      updated_at: now,
     };
 
     instances[moduleType] = instances[moduleType] || [];
     instances[moduleType].push(newInstance);
-    
+
     this.setStoredInstances(instances);
     return newInstance;
   }
@@ -151,7 +237,9 @@ class MockApiService {
 
     const instances = this.getStoredInstances();
     const moduleInstances = instances[moduleType] || [];
-    const instanceIndex = moduleInstances.findIndex(inst => inst.id === instanceId);
+    const instanceIndex = moduleInstances.findIndex(
+      (inst) => inst.id === instanceId
+    );
 
     if (instanceIndex === -1) {
       throw new Error(`Module instance with ID ${instanceId} not found`);
@@ -164,22 +252,27 @@ class MockApiService {
       name: data.name,
       description: data.description,
       configuration: data.configuration,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
 
     instances[moduleType][instanceIndex] = updatedInstance;
     this.setStoredInstances(instances);
-    
+
     return updatedInstance;
   }
 
   // Delete a module instance
-  async deleteModuleInstance(moduleType: ModuleType, instanceId: string): Promise<void> {
+  async deleteModuleInstance(
+    moduleType: ModuleType,
+    instanceId: string
+  ): Promise<void> {
     await this.delay();
 
     const instances = this.getStoredInstances();
     const moduleInstances = instances[moduleType] || [];
-    const instanceIndex = moduleInstances.findIndex(inst => inst.id === instanceId);
+    const instanceIndex = moduleInstances.findIndex(
+      (inst) => inst.id === instanceId
+    );
 
     if (instanceIndex === -1) {
       throw new Error(`Module instance with ID ${instanceId} not found`);
@@ -202,12 +295,13 @@ class MockApiService {
     if (shouldSucceed) {
       return {
         success: true,
-        message: 'Connection successful!'
+        message: "Connection successful!",
       };
     } else {
       return {
         success: false,
-        message: 'Connection failed: Unable to connect to the specified endpoint'
+        message:
+          "Connection failed: Unable to connect to the specified endpoint",
       };
     }
   }
@@ -225,7 +319,7 @@ class MockApiService {
     await this.delay();
     // Try file-backed API first
     try {
-      const resp = await fetch('/mock-api/workflows');
+      const resp = await fetch("/mock-api/workflows");
       if (resp.ok) {
         const json = await resp.json();
         return Array.isArray(json) ? json : [];
@@ -240,7 +334,9 @@ class MockApiService {
   async getWorkflowById(workflowId: string): Promise<any | null> {
     await this.delay();
     try {
-      const resp = await fetch(`/mock-api/workflows/${encodeURIComponent(workflowId)}`);
+      const resp = await fetch(
+        `/mock-api/workflows/${encodeURIComponent(workflowId)}`
+      );
       if (resp.ok) {
         return await resp.json();
       }
@@ -254,10 +350,10 @@ class MockApiService {
     await this.delay();
     // Try to persist to file-backed API
     try {
-      const resp = await fetch('/mock-api/workflows', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(workflowData)
+      const resp = await fetch("/mock-api/workflows", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(workflowData),
       });
       if (resp.ok) {
         return await resp.json();
@@ -267,21 +363,21 @@ class MockApiService {
     // Fallback: localStorage
     const data = this.getStoredWorkflows();
     const now = new Date().toISOString();
-    
+
     const workflow = {
       id: this.generateId(),
-      name: workflowData.name || 'Untitled Workflow',
-      description: workflowData.description || '',
-      status: 'draft',
+      name: workflowData.name || "Untitled Workflow",
+      description: workflowData.description || "",
+      status: "draft",
       created_at: now,
       updated_at: now,
       last_execution: null,
-      execution_status: 'pending',
+      execution_status: "pending",
       nodes: workflowData.nodes || [],
       edges: workflowData.edges || [],
-      viewport: workflowData.viewport || { x: 0, y: 0, zoom: 1 }
+      viewport: workflowData.viewport || { x: 0, y: 0, zoom: 1 },
     };
-    
+
     data.workflows.push(workflow);
     this.setStoredWorkflows(data);
     return workflow;
@@ -290,11 +386,14 @@ class MockApiService {
   async updateWorkflow(workflowId: string, workflowData: any): Promise<any> {
     await this.delay();
     try {
-      const resp = await fetch(`/mock-api/workflows/${encodeURIComponent(workflowId)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(workflowData)
-      });
+      const resp = await fetch(
+        `/mock-api/workflows/${encodeURIComponent(workflowId)}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(workflowData),
+        }
+      );
       if (resp.ok) {
         return await resp.json();
       }
@@ -302,18 +401,20 @@ class MockApiService {
 
     // Fallback: localStorage
     const data = this.getStoredWorkflows();
-    const workflowIndex = data.workflows.findIndex((w: any) => w.id === workflowId);
-    
+    const workflowIndex = data.workflows.findIndex(
+      (w: any) => w.id === workflowId
+    );
+
     if (workflowIndex === -1) {
       throw new Error(`Workflow with ID ${workflowId} not found`);
     }
-    
+
     data.workflows[workflowIndex] = {
       ...data.workflows[workflowIndex],
       ...workflowData,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     };
-    
+
     this.setStoredWorkflows(data);
     return data.workflows[workflowIndex];
   }
@@ -321,7 +422,10 @@ class MockApiService {
   async deleteWorkflow(workflowId: string): Promise<void> {
     await this.delay();
     try {
-      const resp = await fetch(`/mock-api/workflows/${encodeURIComponent(workflowId)}`, { method: 'DELETE' });
+      const resp = await fetch(
+        `/mock-api/workflows/${encodeURIComponent(workflowId)}`,
+        { method: "DELETE" }
+      );
       if (resp.ok || resp.status === 204) {
         return;
       }
@@ -329,49 +433,60 @@ class MockApiService {
 
     // Fallback: localStorage
     const data = this.getStoredWorkflows();
-    const workflowIndex = data.workflows.findIndex((w: any) => w.id === workflowId);
-    
+    const workflowIndex = data.workflows.findIndex(
+      (w: any) => w.id === workflowId
+    );
+
     if (workflowIndex === -1) {
       throw new Error(`Workflow with ID ${workflowId} not found`);
     }
-    
+
     data.workflows.splice(workflowIndex, 1);
     this.setStoredWorkflows(data);
   }
 
-  async executeWorkflow(workflowId: string): Promise<{ success: boolean; message: string; executionId?: string }> {
+  async executeWorkflow(
+    workflowId: string
+  ): Promise<{ success: boolean; message: string; executionId?: string }> {
     await this.delay(2000); // Simulate longer delay for execution
 
     // Try file-backed API
     try {
-      const resp = await fetch(`/mock-api/workflows/${encodeURIComponent(workflowId)}/execute`, { method: 'POST' });
+      const resp = await fetch(
+        `/mock-api/workflows/${encodeURIComponent(workflowId)}/execute`,
+        { method: "POST" }
+      );
       if (resp.ok) {
         return await resp.json();
       }
     } catch (_) {}
-    
+
     // Fallback: localStorage-based simulation
     const data = this.getStoredWorkflows();
-    const workflowIndex = data.workflows.findIndex((w: any) => w.id === workflowId);
-    
+    const workflowIndex = data.workflows.findIndex(
+      (w: any) => w.id === workflowId
+    );
+
     if (workflowIndex !== -1) {
       data.workflows[workflowIndex].last_execution = new Date().toISOString();
-      data.workflows[workflowIndex].execution_status = Math.random() > 0.2 ? 'success' : 'failed';
+      data.workflows[workflowIndex].execution_status =
+        Math.random() > 0.2 ? "success" : "failed";
       this.setStoredWorkflows(data);
     }
-    
+
     const shouldSucceed = Math.random() > 0.2; // 80% success rate for workflows
-    
+
     if (shouldSucceed) {
       return {
         success: true,
-        message: 'Workflow execution started successfully',
-        executionId: `exec_${this.generateId()}`
+        message: "Workflow execution started successfully",
+        executionId: `exec_${this.generateId()}`,
       };
     } else {
       return {
         success: false,
-        message: 'Workflow execution failed: Invalid configuration or connection error'
+        message:
+          "Workflow execution failed: Invalid configuration or connection error",
       };
     }
   }
@@ -385,13 +500,16 @@ class MockApiService {
   } {
     const instances = this.getStoredInstances();
     const workflows = this.getStoredWorkflows();
-    const total = Object.values(instances).reduce((sum, arr) => sum + arr.length, 0);
-    
+    const total = Object.values(instances).reduce(
+      (sum, arr) => sum + arr.length,
+      0
+    );
+
     return {
       instancesSize: JSON.stringify(instances).length,
       lastId: this.lastId,
       totalInstances: total,
-      totalWorkflows: workflows.workflows?.length || 0
+      totalWorkflows: workflows.workflows?.length || 0,
     };
   }
 }
@@ -404,25 +522,32 @@ export const mockApi = {
   // Module-related endpoints
   getModules: () => mockApiService.getModules(),
   getModuleInstances: () => mockApiService.getModuleInstances(),
-  getModuleInstancesByType: (moduleType: ModuleType) => 
+  getModuleInstancesByType: (moduleType: ModuleType) =>
     mockApiService.getModuleInstancesByType(moduleType),
   createModuleInstance: (moduleType: ModuleType, data: any) =>
     mockApiService.createModuleInstance(moduleType, data),
-  updateModuleInstance: (moduleType: ModuleType, instanceId: string, data: any) =>
-    mockApiService.updateModuleInstance(moduleType, instanceId, data),
+  updateModuleInstance: (
+    moduleType: ModuleType,
+    instanceId: string,
+    data: any
+  ) => mockApiService.updateModuleInstance(moduleType, instanceId, data),
   deleteModuleInstance: (moduleType: ModuleType, instanceId: string) =>
     mockApiService.deleteModuleInstance(moduleType, instanceId),
   testConnection: (endpoint: string, payload: Record<string, any>) =>
     mockApiService.testConnection(endpoint, payload),
-    
+
   // Workflow-related endpoints
   getWorkflows: () => mockApiService.getWorkflows(),
-  getWorkflowById: (workflowId: string) => mockApiService.getWorkflowById(workflowId),
-  saveWorkflow: (workflowData: any) => mockApiService.saveWorkflow(workflowData),
-  updateWorkflow: (workflowId: string, workflowData: any) => 
+  getWorkflowById: (workflowId: string) =>
+    mockApiService.getWorkflowById(workflowId),
+  saveWorkflow: (workflowData: any) =>
+    mockApiService.saveWorkflow(workflowData),
+  updateWorkflow: (workflowId: string, workflowData: any) =>
     mockApiService.updateWorkflow(workflowId, workflowData),
-  deleteWorkflow: (workflowId: string) => mockApiService.deleteWorkflow(workflowId),
-  executeWorkflow: (workflowId: string) => mockApiService.executeWorkflow(workflowId)
+  deleteWorkflow: (workflowId: string) =>
+    mockApiService.deleteWorkflow(workflowId),
+  executeWorkflow: (workflowId: string) =>
+    mockApiService.executeWorkflow(workflowId),
 };
 
 export default mockApi;

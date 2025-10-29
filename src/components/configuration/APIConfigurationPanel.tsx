@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Globe, Lock, Key, Eye, EyeOff, Plus, Trash2, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { ModuleParameter } from '../../types/modules';
+import apiExamples from '../../data/api-examples.json';
 
 interface APIConfigurationPanelProps {
   parameters: ModuleParameter[];
@@ -22,6 +23,7 @@ const APIConfigurationPanel: React.FC<APIConfigurationPanelProps> = ({
   const [connectionStatus, setConnectionStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [connectionMessage, setConnectionMessage] = useState('');
   const [responsePreview, setResponsePreview] = useState<any>(null);
+  const [selectedExampleId, setSelectedExampleId] = useState<string>('');
 
   const authType = configuration.auth_type || 'none';
   const method = configuration.method || 'GET';
@@ -142,6 +144,47 @@ const APIConfigurationPanel: React.FC<APIConfigurationPanelProps> = ({
           {errors.endpoint && (
             <p className="text-xs text-red-500 mt-1">{errors.endpoint}</p>
           )}
+        </div>
+      </div>
+
+      {/* Load Example */}
+      <div className="mt-3 grid grid-cols-4 gap-2 items-end">
+        <div className="col-span-3">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Load Example</label>
+          <select
+            value={selectedExampleId}
+            onChange={(e) => setSelectedExampleId(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select a public dataset...</option>
+            {(apiExamples as any).examples.map((ex: any) => (
+              <option key={ex.id} value={ex.id}>{ex.name}</option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <button
+            type="button"
+            className="w-full px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 disabled:opacity-50"
+            disabled={!selectedExampleId}
+            onClick={() => {
+              const ex = (apiExamples as any).examples.find((e: any) => e.id === selectedExampleId);
+              if (!ex) return;
+              if (ex.method) onChange('method', ex.method);
+              if (ex.endpoint) onChange('endpoint', ex.endpoint);
+              onChange('auth_type', ex.auth_type || 'none');
+              onChange('headers', ex.headers || {});
+              onChange('query_params', ex.query_params || {});
+              onChange('response_format', ex.response_format || 'json');
+              onChange('data_path', ex.data_path || '$');
+              if (ex.auth_type === 'api_key') {
+                if (ex.api_key_location) onChange('api_key_location', ex.api_key_location);
+                if (ex.api_key_name) onChange('api_key_name', ex.api_key_name);
+              }
+            }}
+          >
+            Apply Example
+          </button>
         </div>
       </div>
 

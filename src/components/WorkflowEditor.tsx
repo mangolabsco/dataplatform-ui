@@ -324,12 +324,12 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ workflowId, onBack }) =
     <div className="flex h-full">
       <Sidebar />
       <div className="flex-1 flex flex-col">
-        <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+        <div className="bg-background border-b border-border px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
             {onBack && (
               <button
                 onClick={onBack}
-                className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
+                className="p-2 text-muted-foreground hover:text-foreground rounded-full hover:bg-accent transition-colors duration-200"
                 title="Back to Dashboard"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -340,25 +340,25 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ workflowId, onBack }) =
               value={workflowName}
               onChange={(e) => setWorkflowName(e.target.value)}
               placeholder={workflowId ? 'Edit workflow name' : 'Untitled Workflow'}
-              className="px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm w-64"
+              className="px-4 py-2 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring text-sm w-64 text-foreground placeholder-muted-foreground"
             />
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-3">
             <button
               onClick={onSave}
-              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 bg-primary text-primary-foreground text-sm rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-200"
             >
               Save
             </button>
             <button
               onClick={onRestore}
-              className="px-4 py-2 bg-gray-600 text-white text-sm rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-md hover:bg-secondary/80 focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-200"
             >
               Load
             </button>
             <button
               onClick={onExecute}
-              className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="px-4 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-ring transition-colors duration-200"
             >
               Execute
             </button>
@@ -387,26 +387,26 @@ const WorkflowEditor: React.FC<WorkflowEditorProps> = ({ workflowId, onBack }) =
       {/* Name Prompt Modal */}
       {showNameModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-md shadow-lg w-full max-w-md p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Save workflow</h3>
-            <p className="text-sm text-gray-600 mb-3">Enter a name for this workflow.</p>
+          <div className="bg-card rounded-lg shadow-lg w-full max-w-md p-6 border border-border">
+            <h3 className="text-lg font-semibold text-foreground mb-3">Save workflow</h3>
+            <p className="text-sm text-muted-foreground mb-4">Enter a name for this workflow.</p>
             <input
               type="text"
               value={tempName}
               onChange={(e) => setTempName(e.target.value)}
               placeholder="Untitled Workflow"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+              className="w-full px-4 py-2 border border-input bg-background rounded-md focus:outline-none focus:ring-2 focus:ring-ring mb-6 text-foreground placeholder-muted-foreground"
             />
-            <div className="flex justify-end space-x-2">
+            <div className="flex justify-end space-x-3">
               <button
                 onClick={handleNameModalCancel}
-                className="px-4 py-2 text-sm rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 text-sm rounded-md border border-input text-foreground hover:bg-accent transition-colors duration-200"
               >
                 Cancel
               </button>
               <button
                 onClick={handleNameModalSave}
-                className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
               >
                 Save
               </button>

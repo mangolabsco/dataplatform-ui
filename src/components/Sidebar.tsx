@@ -45,30 +45,30 @@ const Sidebar: React.FC<SidebarProps> = () => {
   ];
 
   return (
-    <div className="w-64 bg-gray-50 border-r border-gray-200 p-4 h-full overflow-y-auto">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Components</h3>
+    <div className="w-64 bg-muted border-r border-border p-6 h-full overflow-y-auto">
+      <h3 className="text-lg font-semibold text-foreground mb-6">Components</h3>
       
       {nodeCategories.map((category, categoryIndex) => (
-        <div key={categoryIndex} className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">{category.title}</h4>
-          <div className="space-y-2">
+        <div key={categoryIndex} className="mb-8">
+          <h4 className="text-sm font-medium text-muted-foreground mb-4">{category.title}</h4>
+          <div className="space-y-3">
             {category.nodes.map((node, nodeIndex) => {
               const IconComponent = node.icon;
               return (
                 <div
                   key={nodeIndex}
-                  className="flex items-center p-2 bg-white rounded-lg shadow-sm cursor-grab hover:shadow-md transition-shadow border border-gray-200"
+                  className="flex items-center p-4 bg-card rounded-lg shadow-sm cursor-grab hover:shadow-md transition-shadow border border-border"
                   draggable
                   onDragStart={(event) => onDragStart(event, `${node.type}-${node.subtype}`)}
                 >
-                  <div className={`rounded-full w-8 h-8 flex items-center justify-center mr-3 ${
+                  <div className={`rounded-full w-8 h-8 flex items-center justify-center mr-4 ${
                     node.type === 'source' ? 'bg-green-100' :
                     node.type === 'transformation' ? 'bg-blue-100' :
                     node.type === 'table' ? 'bg-purple-100' : 'bg-red-100'
                   }`}>
                     <IconComponent className={`w-4 h-4 ${node.color}`} />
                   </div>
-                  <span className="text-sm font-medium text-gray-900">{node.label}</span>
+                  <span className="text-sm font-medium text-foreground">{node.label}</span>
                 </div>
               );
             })}

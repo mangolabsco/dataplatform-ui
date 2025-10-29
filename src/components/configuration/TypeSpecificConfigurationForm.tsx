@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Database, Globe, Eye, EyeOff, CheckCircle, XCircle, RefreshCw, Settings } from 'lucide-react';
 import { ModuleDefinition } from '../../types/modules';
 import { mockApi } from '../../services/mockApi';
+import apiExamples from '../../data/api-examples.json';
 
 interface TypeSpecificConfigurationFormProps {
   moduleDefinition: ModuleDefinition;
@@ -51,11 +52,13 @@ const TypeSpecificConfigurationForm: React.FC<TypeSpecificConfigurationFormProps
       } else if (moduleId.includes('api') || moduleId.includes('rest')) {
         endpoint = '/api/test-connection';
         const baseUrl = `${configuration.protocol || 'https'}://${configuration.host}${configuration.port ? ':' + configuration.port : ''}`;
-        const fullUrl = configuration.base_path ? `${baseUrl}${configuration.base_path}` : baseUrl;
+        const constructedUrl = configuration.base_path ? `${baseUrl}${configuration.base_path}` : baseUrl;
+        const endpointUrl = configuration.endpoint || constructedUrl;
+        const methodToUse = configuration.method || 'GET';
         
         payload = {
-          url: fullUrl,
-          method: 'GET',
+          url: endpointUrl,
+          method: methodToUse,
           timeout: 10000
         };
       }
@@ -414,6 +417,73 @@ const TypeSpecificConfigurationForm: React.FC<TypeSpecificConfigurationFormProps
               <span className="text-gray-400">Enter host to see URL preview</span>
             )}
           </code>
+        </div>
+      </div>
+
+      {/* Example APIs - Quick presets using public datasets */}
+      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h5 className="text-sm font-medium text-gray-900">Example APIs</h5>
+          <span className="text-xs text-gray-500">Load presets from public datasets</span>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {(apiExamples as any).examples.map((ex: any) => (
+            <div key={ex.id} className="border border-gray-200 rounded-md p-3 bg-white">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-semibold text-gray-800">{ex.name}</div>
+                  <div className="text-xs text-gray-500 mt-0.5">{ex.protocol || 'https'}://{ex.host}{ex.base_path || ''}</div>
+                </div>
+                <div className="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                  {ex.auth_type && ex.auth_type !== 'none' ? ex.auth_type : 'no auth'}
+                </div>
+              </div>
+              {ex.endpoint && (
+                <div className="mt-2">
+                  <div className="text-[10px] uppercase tracking-wide text-gray-400">Sample endpoint</div>
+                  <div className="text-xs font-mono text-gray-700 break-all">
+                    {ex.endpoint}
+                  </div>
+                </div>
+              )}
+              <div className="mt-3 flex items-center gap-2">
+                <button
+                  type="button"
+                  className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                  onClick={() => {
+                    onChange('protocol', ex.protocol || 'https');
+                    onChange('host', ex.host || '');
+                    onChange('port', ex.port || '');
+                    onChange('base_path', ex.base_path || '');
+                  }}
+                >
+                  Apply host + base path
+                </button>
+                <button
+                  type="button"
+                  className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                  onClick={() => {
+                    // Apply full endpoint and common API options if present
+                    if (ex.method) onChange('method', ex.method);
+                    if (ex.endpoint) onChange('endpoint', ex.endpoint);
+                    onChange('auth_type', ex.auth_type || 'none');
+                    if (ex.headers) onChange('headers', ex.headers);
+                    if (ex.query_params) onChange('query_params', ex.query_params);
+                    if (ex.response_format) onChange('response_format', ex.response_format);
+                    if (ex.data_path) onChange('data_path', ex.data_path);
+                    if (ex.rate_limit !== undefined) onChange('rate_limit', ex.rate_limit);
+                    if (ex.auth_type === 'api_key') {
+                      if (ex.api_key_location) onChange('api_key_location', ex.api_key_location);
+                      if (ex.api_key_name) onChange('api_key_name', ex.api_key_name);
+                      // Do NOT set actual api_key value; keep it empty or templated
+                    }
+                  }}
+                >
+                  Apply full endpoint
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

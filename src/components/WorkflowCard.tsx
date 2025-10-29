@@ -111,13 +111,13 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
   const canRun = workflow.status !== 'running';
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300 group">
+    <div className="bg-card rounded-2xl shadow-sm border border-border hover:shadow-lg transition-all duration-300 group">
       {/* Header */}
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
+      <div className="p-8">
+        <div className="flex items-start justify-between mb-6">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center space-x-3 mb-3">
-              <h3 className="text-xl font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors duration-200">
+            <div className="flex items-center space-x-3 mb-4">
+              <h3 className="text-xl font-semibold text-foreground truncate group-hover:text-primary transition-colors duration-200">
                 {workflow.name}
               </h3>
               <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide ${getStatusColor(workflow.status)}`}>
@@ -125,7 +125,7 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
                 <span className="ml-1.5">{workflow.status}</span>
               </div>
             </div>
-            <p className="text-gray-600 line-clamp-2 text-sm leading-relaxed">
+            <p className="text-muted-foreground line-clamp-2 text-sm leading-relaxed">
               {workflow.description || 'No description provided'}
             </p>
           </div>
@@ -134,49 +134,49 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
           <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <button
               onClick={() => onEdit(workflow.id)}
-              className="p-2.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200"
+              className="p-2.5 text-muted-foreground hover:text-primary hover:bg-accent rounded-lg transition-all duration-200"
               title="Edit workflow"
             >
               <Edit3 className="w-4 h-4" />
             </button>
-            <button className="p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all duration-200">
+            <button className="p-2.5 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-all duration-200">
               <MoreVertical className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Metrics Grid */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition-colors duration-200">
-            <div className="flex items-center space-x-2 mb-1">
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <div className="bg-muted rounded-xl p-4 hover:bg-muted/80 transition-colors duration-200">
+            <div className="flex items-center space-x-2 mb-2">
               <GitBranch className="w-4 h-4 text-blue-500" />
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Nodes</span>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Nodes</span>
             </div>
-            <span className="text-lg font-bold text-gray-900">{workflow.node_count || 0}</span>
+            <span className="text-lg font-bold text-foreground">{workflow.node_count || 0}</span>
           </div>
           
-          <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition-colors duration-200">
-            <div className="flex items-center space-x-2 mb-1">
+          <div className="bg-muted rounded-xl p-4 hover:bg-muted/80 transition-colors duration-200">
+            <div className="flex items-center space-x-2 mb-2">
               <Database className="w-4 h-4 text-purple-500" />
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Tables</span>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Tables</span>
             </div>
-            <span className="text-lg font-bold text-gray-900">{workflow.table_count || 0}</span>
+            <span className="text-lg font-bold text-foreground">{workflow.table_count || 0}</span>
           </div>
           
-          <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition-colors duration-200">
-            <div className="flex items-center space-x-2 mb-1">
+          <div className="bg-muted rounded-xl p-4 hover:bg-muted/80 transition-colors duration-200">
+            <div className="flex items-center space-x-2 mb-2">
               <Clock className="w-4 h-4 text-orange-500" />
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Runtime</span>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Runtime</span>
             </div>
-            <span className="text-lg font-bold text-gray-900">{workflow.avg_runtime || 'N/A'}</span>
+            <span className="text-lg font-bold text-foreground">{workflow.avg_runtime || 'N/A'}</span>
           </div>
           
-          <div className="bg-gray-50 rounded-xl p-3 hover:bg-gray-100 transition-colors duration-200">
-            <div className="flex items-center space-x-2 mb-1">
+          <div className="bg-muted rounded-xl p-4 hover:bg-muted/80 transition-colors duration-200">
+            <div className="flex items-center space-x-2 mb-2">
               <CheckCircle className="w-4 h-4 text-green-500" />
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Success</span>
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Success</span>
             </div>
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-lg font-bold text-foreground">
               {workflow.success_rate ? `${workflow.success_rate}%` : 'N/A'}
             </span>
           </div>
@@ -184,9 +184,9 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
       </div>
 
       {/* Footer */}
-      <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-100 rounded-b-2xl">
+      <div className="px-8 py-6 bg-muted border-t border-border rounded-b-2xl">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4 text-xs text-gray-500">
+          <div className="flex items-center space-x-6 text-xs text-muted-foreground">
             <div className="flex items-center space-x-2">
               <Calendar className="w-3.5 h-3.5" />
               <span className="font-medium">Created {formatDate(workflow.created_at)}</span>
@@ -205,8 +205,8 @@ const WorkflowCard: React.FC<WorkflowCardProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <div className="text-xs text-gray-500 bg-white px-2 py-1 rounded-full font-medium">
+          <div className="flex items-center space-x-4">
+            <div className="text-xs text-muted-foreground bg-background px-3 py-1.5 rounded-full font-medium">
               {workflow.total_executions || 0} runs
             </div>
             

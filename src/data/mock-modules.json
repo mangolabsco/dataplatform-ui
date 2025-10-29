@@ -198,50 +198,373 @@
     }
   ],
   "transformations": [
-    {
-      "id": "filter_transformation",
-      "name": "Filter Rows",
-      "category": "Data Processing",
-      "type": "filter",
-      "description": "Filter data rows based on conditions",
-      "icon": "filter",
-      "parameters": [
-        {
-          "name": "filter_expression",
-          "label": "Filter Expression",
-          "type": "textarea",
-          "required": true,
-          "placeholder": "column_name > 100",
-          "help": "SQL-like expression to filter rows"
-        }
-      ]
-    },
-    {
-      "id": "aggregate_transformation",
-      "name": "Aggregate Data",
-      "category": "Data Processing",
-      "type": "aggregate",
-      "description": "Group and aggregate data",
-      "icon": "bar-chart-3",
-      "parameters": [
-        {
-          "name": "group_by",
-          "label": "Group By Columns",
-          "type": "multi_select",
-          "required": true,
-          "options": [],
-          "help": "Columns to group by"
-        },
-        {
-          "name": "aggregations",
-          "label": "Aggregations",
-          "type": "key_value",
-          "required": true,
-          "help": "Column -> Aggregation function mapping (e.g., sales -> sum)"
-        }
-      ]
-    }
-  ],
+      {
+        "id": "filter_transformation",
+        "name": "Filter Rows",
+        "category": "Data Processing",
+        "type": "filter",
+        "description": "Filter data rows based on conditions",
+        "icon": "filter",
+        "parameters": [
+          {
+            "name": "filter_expression",
+            "label": "Filter Expression",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "column_name > 100",
+            "help": "SQL-like expression to filter rows"
+          }
+        ]
+      },
+      {
+        "id": "select_columns_transformation",
+        "name": "Select Columns",
+        "category": "Data Processing",
+        "type": "select_columns",
+        "description": "Keep or remove specific columns",
+        "icon": "columns",
+        "parameters": [
+          {
+            "name": "columns",
+            "label": "Columns to Select",
+            "type": "multi_select",
+            "required": true,
+            "options": [],
+            "help": "Columns to keep in the dataset"
+          }
+        ]
+      },
+      {
+        "id": "rename_columns_transformation",
+        "name": "Rename Columns",
+        "category": "Data Processing",
+        "type": "rename_columns",
+        "description": "Change the name of columns",
+        "icon": "edit",
+        "parameters": [
+          {
+            "name": "rename_mapping",
+            "label": "Rename Mapping",
+            "type": "key_value",
+            "required": true,
+            "help": "Old Name -> New Name mapping"
+          }
+        ]
+      },
+      {
+        "id": "add_update_column_transformation",
+        "name": "Add/Update Column",
+        "category": "Data Processing",
+        "type": "add_update_column",
+        "description": "Add a new column or modify an existing one",
+        "icon": "plus",
+        "parameters": [
+          {
+            "name": "column_name",
+            "label": "Column Name",
+            "type": "text",
+            "required": true,
+            "placeholder": "new_column",
+            "help": "Name of the column to add or update"
+          },
+          {
+            "name": "expression",
+            "label": "Expression",
+            "type": "textarea",
+            "required": true,
+            "placeholder": "column_a + column_b",
+            "help": "Expression to calculate the column value"
+          }
+        ]
+      },
+      {
+        "id": "aggregate_transformation",
+        "name": "Aggregate Data",
+        "category": "Data Processing",
+        "type": "aggregate",
+        "description": "Group and aggregate data",
+        "icon": "bar-chart-3",
+        "parameters": [
+          {
+            "name": "group_by",
+            "label": "Group By Columns",
+            "type": "multi_select",
+            "required": true,
+            "options": [],
+            "help": "Columns to group by"
+          },
+          {
+            "name": "aggregations",
+            "label": "Aggregations",
+            "type": "key_value",
+            "required": true,
+            "help": "Column -> Aggregation function mapping (e.g., sales -> sum)"
+          }
+        ]
+      },
+      {
+        "id": "join_transformation",
+        "name": "Join",
+        "category": "Data Integration",
+        "type": "join",
+        "description": "Combine two datasets based on a common key",
+        "icon": "git-merge",
+        "parameters": [
+          {
+            "name": "join_type",
+            "label": "Join Type",
+            "type": "select",
+            "required": true,
+            "default": "inner",
+            "options": ["inner", "left", "right", "outer"],
+            "help": "The type of join to perform"
+          },
+          {
+            "name": "left_on",
+            "label": "Left On",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Column from the left dataset to join on"
+          },
+          {
+            "name": "right_on",
+            "label": "Right On",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Column from the right dataset to join on"
+          }
+        ]
+      },
+      {
+        "id": "union_transformation",
+        "name": "Union",
+        "category": "Data Integration",
+        "type": "union",
+        "description": "Append rows from one dataset to another",
+        "icon": "layers",
+        "parameters": []
+      },
+      {
+        "id": "sort_transformation",
+        "name": "Sort",
+        "category": "Data Processing",
+        "type": "sort",
+        "description": "Order rows based on one or more columns",
+        "icon": "arrow-up-down",
+        "parameters": [
+          {
+            "name": "sort_keys",
+            "label": "Sort Keys",
+            "type": "key_value",
+            "required": true,
+            "help": "Column -> Sort Order (asc/desc) mapping"
+          }
+        ]
+      },
+      {
+        "id": "deduplicate_transformation",
+        "name": "Deduplicate",
+        "category": "Data Cleaning",
+        "type": "deduplicate",
+        "description": "Remove duplicate rows",
+        "icon": "copy-x",
+        "parameters": [
+          {
+            "name": "columns",
+            "label": "Columns to consider for deduplication",
+            "type": "multi_select",
+            "required": false,
+            "options": [],
+            "help": "Columns to consider for identifying duplicate rows. If empty, all columns are used."
+          }
+        ]
+      },
+      {
+        "id": "pivot_transformation",
+        "name": "Pivot",
+        "category": "Data Reshaping",
+        "type": "pivot",
+        "description": "Transform data from a long to a wide format",
+        "icon": "move",
+        "parameters": [
+          {
+            "name": "index",
+            "label": "Index Column",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Column to use as new frame's index"
+          },
+          {
+            "name": "columns",
+            "label": "Columns to Pivot",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Column to use to make new frame's columns"
+          },
+          {
+            "name": "values",
+            "label": "Values Column",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Column to populate new frame's values"
+          }
+        ]
+      },
+      {
+        "id": "unpivot_transformation",
+        "name": "Unpivot",
+        "category": "Data Reshaping",
+        "type": "unpivot",
+        "description": "Transform data from a wide to a long format",
+        "icon": "move",
+        "parameters": [
+          {
+            "name": "id_vars",
+            "label": "Identifier Variables",
+            "type": "multi_select",
+            "required": true,
+            "options": [],
+            "help": "Column(s) to use as identifier variables"
+          },
+          {
+            "name": "value_vars",
+            "label": "Value Variables",
+            "type": "multi_select",
+            "required": true,
+            "options": [],
+            "help": "Column(s) to unpivot. If not specified, all columns that are not set as `id_vars` will be used"
+          }
+        ]
+      },
+      {
+        "id": "handle_missing_values_transformation",
+        "name": "Handle Missing Values",
+        "category": "Data Cleaning",
+        "type": "handle_missing_values",
+        "description": "Fill or remove null/NA values",
+        "icon": "clipboard-check",
+        "parameters": [
+          {
+            "name": "strategy",
+            "label": "Strategy",
+            "type": "select",
+            "required": true,
+            "default": "remove",
+            "options": ["remove", "fill"],
+            "help": "Strategy to handle missing values"
+          },
+          {
+            "name": "fill_value",
+            "label": "Fill Value",
+            "type": "text",
+            "required": false,
+            "placeholder": "0",
+            "help": "Value to use for filling missing values"
+          }
+        ]
+      },
+      {
+        "id": "change_data_type_transformation",
+        "name": "Change Data Type",
+        "category": "Data Cleaning",
+        "type": "change_data_type",
+        "description": "Convert the data type of a column",
+        "icon": "type",
+        "parameters": [
+          {
+            "name": "column",
+            "label": "Column",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Column to convert"
+          },
+          {
+            "name": "data_type",
+            "label": "Data Type",
+            "type": "select",
+            "required": true,
+            "default": "string",
+            "options": ["string", "integer", "float", "boolean", "datetime"],
+            "help": "Data type to convert to"
+          }
+        ]
+      },
+      {
+        "id": "string_manipulation_transformation",
+        "name": "String Manipulation",
+        "category": "Data Cleaning",
+        "type": "string_manipulation",
+        "description": "Perform operations on string columns",
+        "icon": "case-sensitive",
+        "parameters": [
+          {
+            "name": "column",
+            "label": "Column",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "String column to manipulate"
+          },
+          {
+            "name": "operation",
+            "label": "Operation",
+            "type": "select",
+            "required": true,
+            "default": "uppercase",
+            "options": ["uppercase", "lowercase", "trim", "replace"],
+            "help": "String operation to perform"
+          },
+          {
+            "name": "replace_from",
+            "label": "Replace From",
+            "type": "text",
+            "required": false,
+            "placeholder": "old_string",
+            "help": "String to replace (only for 'replace' operation)"
+          },
+          {
+            "name": "replace_to",
+            "label": "Replace To",
+            "type": "text",
+            "required": false,
+            "placeholder": "new_string",
+            "help": "String to replace with (only for 'replace' operation)"
+          }
+        ]
+      },
+      {
+        "id": "date_time_formatting_transformation",
+        "name": "Date/Time Formatting",
+        "category": "Data Cleaning",
+        "type": "date_time_formatting",
+        "description": "Parse, format, or extract components from date/time columns",
+        "icon": "calendar",
+        "parameters": [
+          {
+            "name": "column",
+            "label": "Column",
+            "type": "text",
+            "required": true,
+            "placeholder": "column_name",
+            "help": "Date/time column to format"
+          },
+          {
+            "name": "output_format",
+            "label": "Output Format",
+            "type": "text",
+            "required": true,
+            "placeholder": "%Y-%m-%d",
+            "help": "Output format for the date/time column"
+          }
+        ]
+      }
+    ],
   "sinks": [
     {
       "id": "postgresql_sink",

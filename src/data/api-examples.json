@@ -1,0 +1,143 @@
+{
+  "examples": [
+    {
+      "id": "usgs_earthquakes",
+      "name": "USGS Earthquakes (JSON, no auth)",
+      "protocol": "https",
+      "host": "earthquake.usgs.gov",
+      "base_path": "/fdsnws/event/1/query",
+      "method": "GET",
+      "endpoint": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=10",
+      "auth_type": "none",
+      "headers": {},
+      "query_params": {
+        "format": "geojson",
+        "limit": "10"
+      },
+      "response_format": "json",
+      "data_path": "$.features",
+      "rate_limit": null,
+      "notes": "Public endpoint; returns recent earthquake data",
+      "docs_url": "https://earthquake.usgs.gov/fdsnws/event/1/"
+    },
+    {
+      "id": "open_meteo_forecast",
+      "name": "Open-Meteo Weather Forecast (JSON, no auth)",
+      "protocol": "https",
+      "host": "api.open-meteo.com",
+      "base_path": "/v1/forecast",
+      "method": "GET",
+      "endpoint": "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m",
+      "auth_type": "none",
+      "headers": {},
+      "query_params": {
+        "latitude": "52.52",
+        "longitude": "13.41",
+        "hourly": "temperature_2m"
+      },
+      "response_format": "json",
+      "data_path": "$",
+      "rate_limit": null,
+      "notes": "No API key required.",
+      "docs_url": "https://open-meteo.com/"
+    },
+    {
+      "id": "world_bank_indicators",
+      "name": "World Bank Indicators (JSON, no auth)",
+      "protocol": "https",
+      "host": "api.worldbank.org",
+      "base_path": "/v2/country/US/indicator/SP.POP.TOTL",
+      "method": "GET",
+      "endpoint": "https://api.worldbank.org/v2/country/US/indicator/SP.POP.TOTL?format=json",
+      "auth_type": "none",
+      "headers": {},
+      "query_params": {
+        "format": "json"
+      },
+      "response_format": "json",
+      "data_path": "$[1]",
+      "rate_limit": null,
+      "notes": "Returns population data; index 1 contains data array.",
+      "docs_url": "https://data.worldbank.org/developers"
+    },
+    {
+      "id": "coindesk_bpi",
+      "name": "CoinDesk Bitcoin Price Index (JSON, no auth)",
+      "protocol": "https",
+      "host": "api.coindesk.com",
+      "base_path": "/v1/bpi/currentprice.json",
+      "method": "GET",
+      "endpoint": "https://api.coindesk.com/v1/bpi/currentprice.json",
+      "auth_type": "none",
+      "headers": {},
+      "query_params": {},
+      "response_format": "json",
+      "data_path": "$.bpi",
+      "rate_limit": null,
+      "notes": "Bitcoin price index by currency.",
+      "docs_url": "https://www.coindesk.com/coindesk-api"
+    },
+    {
+      "id": "github_commits",
+      "name": "GitHub Repo Commits (JSON, optional Bearer)",
+      "protocol": "https",
+      "host": "api.github.com",
+      "base_path": "/repos/octocat/Hello-World/commits",
+      "method": "GET",
+      "endpoint": "https://api.github.com/repos/octocat/Hello-World/commits?per_page=5",
+      "auth_type": "none",
+      "headers": {
+        "Accept": "application/vnd.github+json"
+      },
+      "query_params": {
+        "per_page": "5"
+      },
+      "response_format": "json",
+      "data_path": "$",
+      "rate_limit": null,
+      "notes": "Unauthenticated requests are rate-limited; bearer token improves limits.",
+      "docs_url": "https://docs.github.com/rest/commits/commits"
+    },
+    {
+      "id": "socrata_nyc_311",
+      "name": "NYC 311 Service Requests (Socrata SODA API, JSON)",
+      "protocol": "https",
+      "host": "data.cityofnewyork.us",
+      "base_path": "/resource/erm2-nwe9.json",
+      "method": "GET",
+      "endpoint": "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$limit=5",
+      "auth_type": "none",
+      "headers": {},
+      "query_params": {
+        "$limit": "5"
+      },
+      "response_format": "json",
+      "data_path": "$",
+      "rate_limit": null,
+      "notes": "Public dataset; supports '$select', '$where', '$limit' parameters.",
+      "docs_url": "https://dev.socrata.com/"
+    },
+    {
+      "id": "nasa_apod",
+      "name": "NASA APOD (API key in query)",
+      "protocol": "https",
+      "host": "api.nasa.gov",
+      "base_path": "/planetary/apod",
+      "method": "GET",
+      "endpoint": "https://api.nasa.gov/planetary/apod?api_key={{NASA_API_KEY}}",
+      "auth_type": "api_key",
+      "headers": {},
+      "query_params": {
+        "api_key": "{{NASA_API_KEY}}"
+      },
+      "api_key_location": "query",
+      "api_key_name": "api_key",
+      "response_format": "json",
+      "data_path": "$",
+      "rate_limit": null,
+      "notes": "Replace {{NASA_API_KEY}} with your key.",
+      "docs_url": "https://api.nasa.gov/"
+    }
+  ]
+}
+
